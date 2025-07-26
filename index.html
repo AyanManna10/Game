@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Catch the Mouse</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #1f4037, #99f2c8);
+            overflow: hidden;
+                   }
+
+        .ground {
+            float: left;
+            width: calc(100% - 400px);
+            height: 100vh;
+            position: relative;
+        }
+
+        .crcl {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            position: absolute;
+            background-image: url("mouse.png");
+            background-size: cover;
+            cursor: pointer;
+            animation: movement 30s infinite;
+        }
+
+        @keyframes movement {
+            0%   { left: 0px; top: 0px; }
+            10%  { left: 300px; top: 200px; }
+            20%  { left: 600px; top: 100px; }
+            30%  { left: 600px; top: 600px; }
+            40%  { left: 300px; top: 600px; }
+            50%  { left: 100px; top: 0px; }
+            60%  { left: 700px; top: 200px; }
+            70%  { left: 100px; top: 500px; }
+            80%  { left: 0px; top: 600px; }
+            90%  { left: 400px; top: 300px; }
+            100% { left: 600px; top: 200px; }
+        }
+
+        .details {
+            float: right;
+            width: 400px;
+            height: 100vh;
+            background-color: #ffffff10;
+            backdrop-filter: blur(15px);
+            color: white;
+            text-align: center;
+            padding: 30px;
+        }
+
+        .details h1 {
+            font-size: 36px;
+            margin-bottom: 10px;
+            color: #fff;
+        }
+
+        .level {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .level button, .details button {
+            border-radius: 20px;
+            padding: 12px 24px;
+            font-size: 16px;
+            border: none;
+            background-color: #28a745;
+            color: white;
+            cursor: pointer;
+            transition: 0.3s ease;
+        }
+
+        .level button:hover, .details button:hover {
+            background-color: #fff;
+            color: #28a745;
+        }
+
+        .display_score, .timer {
+            margin-top: 30px;
+        }
+
+        .display_score h2, .timer h2 {
+            font-size: 24px;
+            color: #fff;
+        }
+
+        audio {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="ground">
+        <div id="circle" onclick="count()"></div>
+    </div>
+
+    <div class="details">
+        <h1>Catch the Mouse</h1>
+        <h3>Choose difficulty to start</h3>
+        <div class="level">
+            <button onclick="easy()">EASY</button>
+            <button onclick="medium()">MEDIUM</button>
+            <button onclick="hard()">HARD</button>
+        </div>
+        <div class="display_score">
+            <h2>Score</h2>
+            <h2 id="score">0</h2>
+        </div>
+        <div class="timer">
+            <h2>Time Left</h2>
+            <h2 id="time">30</h2>
+        </div>
+        <button onclick="restart()">RESTART</button>
+    </div>
+
+    <!-- Sound -->
+    <audio id="clickSound" src="mouse.mp3"></audio>
+
+    <script>
+        let cnt = 0;
+        let timer;
+        let timeLeft = 30;
+        let gameStarted = false;
+
+        function startGame() {
+            if (!gameStarted) {
+                gameStarted = true;
+                timer = setInterval(() => {
+                    timeLeft--;
+                    document.getElementById("time").innerText = timeLeft;
+                    if (timeLeft <= 0) {
+                        clearInterval(timer);
+                        alert("Time's up! Your score: " + cnt);
+                        document.getElementById('circle').style.display = "none";
+                    }
+                }, 1000);
+            }
+        }
+
+        function easy() {
+            document.getElementById('circle').style.animationDuration = '30s';
+            document.getElementById('circle').className = 'crcl';
+            startGame();
+        }
+
+        function medium() {
+            document.getElementById('circle').style.animationDuration = '20s';
+            document.getElementById('circle').className = 'crcl';
+            startGame();
+        }
+
+        function hard() {
+            document.getElementById('circle').style.animationDuration = '15s';
+            document.getElementById('circle').className = 'crcl';
+            startGame();
+        }
+
+        function count() {
+            cnt++;
+            document.getElementById('score').innerText = cnt;
+            document.getElementById("clickSound").play();
+        }
+
+        function restart() {
+            window.location.reload();
+        }
+    </script>
+</body>
+</html>
